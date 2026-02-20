@@ -1,4 +1,4 @@
-FROM silkeh/clang:18-bookworm
+FROM alt/sisyphus
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -7,7 +7,11 @@ RUN apt-get update && apt-get install -y \
     libtool \
     pkg-config \
     python3-dev \
-    && rm -rf /var/lib/apt/lists/*
+    clang20.1-analyzer \
+    llvm \
+    llvm20.1 \
+    && apt-get clean
+
     
 ARG LIBXML2_VERSION=v2.12.10
 ARG SISYPHUS_REPO=git://git.altlinux.org/gears/l/libxml2.git
@@ -17,13 +21,8 @@ WORKDIR /src
 RUN git clone --depth 1 --branch ${LIBXML2_VERSION} ${SISYPHUS_REPO} libxml2
 
 WORKDIR /src/libxml2
-RUN ./autogen.sh
-RUN ./configure 
+RUN ./autogen.sh && ./configure 
 
 RUN mkdir -p /report
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-	
+CMD make clean && scan-build -o /report --use-cc=clang make -j$(nproc)
