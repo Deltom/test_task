@@ -1,5 +1,16 @@
 # SAST / Fuzzing 
 
+## Prerequisites
+
+The following dependency is required to run all stages of the project:
+
+- Podman (used for building and running containers)
+
+On ALT Linux, Podman can be installed with:
+```bash
+apt-get install podman
+```
+
 ### Build the base image
 ```bash
 ./do_some_tests
