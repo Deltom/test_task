@@ -24,6 +24,9 @@ The manual analysis and classification of three selected static analysis warning
 ./do_some_tests fuzzing
 ```
 
+### Summary about fuzzing
+A short summary of fuzzing is available in the `fuzzing/` directory, in the `summary.md` file.
+
 ### View results
 Report is created in **fuzzing/reports/**
 
