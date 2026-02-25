@@ -1,17 +1,17 @@
 #!/bin/bash
 
 if [ "$1" = "--help" ] ; then
-	echo "Usage: static|fuzzing_DONT_WORK"
+	echo "Usage: static|fuzzing"
   exit 0
 fi
 
 IMAGE_NAME_BASE="libxml2-base"
 IMAGE_NAME_SA="libxml2_sa"
-IMAGE_NAME_FZ="NAIN"
+IMAGE_NAME_FZ="libxml2_fz"
 
 DIR_BS="./base"
 DIR_SA="./static-analysis"
-DIR_FZ="NAIN"
+DIR_FZ="./fuzzing"
 
 if ! podman image exists "$IMAGE_NAME_BASE"; then
 	echo "Nope"
@@ -26,12 +26,21 @@ static_run() {
 
 }
 
+fuzzing_run() {
+	podman build -t "$IMAGE_NAME_FZ" "$DIR_FZ"
+	podman run --rm -it -v $(pwd)/fuzzing/reports:/src/libxml2/out "$IMAGE_NAME_FZ"
+}
+
 case "$1" in
     	static)
 		static_run
         ;;
 
+	fuzzing)
+		fuzzing_run
+	;;
+
 	all|"")
-        	echo "Usage: static|fuzzing_DONT_WORK"
+        	echo "Usage: static|fuzzing"
         ;;
 esac

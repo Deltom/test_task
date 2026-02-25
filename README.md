@@ -17,8 +17,15 @@ HTML report is created in **static-analysis/reports/** under a timestamped subdi
 
 The manual analysis and classification of three selected static analysis warnings is available in the triage/ directory. 
 
-## Fuzzing (DONT WORK NOW)
+## Fuzzing 
 
+### Run dynamic analysis
+```bash
+./do_some_tests fuzzing
+```
+
+### View results
+Report is created in **fuzzing/reports/**
 
 ## Help
 ```bash
