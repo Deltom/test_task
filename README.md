@@ -45,3 +45,34 @@ Report is created in **fuzzing/reports/**
 ```bash
 ./do_some_tests --help
 ```
+
+## How the script works
+
+The script automates building and running static analysis and fuzzing for libxml2 using Podman.
+
+### Logic:
+
+    Checks if the base image libxml2-base exists — if not, builds it from ./base
+
+    Depending on the argument, runs either static analysis or fuzzing
+
+    Builds specialized images and mounts result directories
+
+### Commands:
+
+```bash
+# Build base image
+podman build -t libxml2-base ./base
+
+# Build static analysis image
+podman build -t libxml2_sa ./static-analysis
+
+# Run static analysis
+podman run --rm -v $(pwd)/static-analysis/reports:/report libxml2_sa
+
+# Build fuzzing image
+podman build -t libxml2_fz ./fuzzing
+
+# Run fuzzing
+podman run --rm -it -v $(pwd)/fuzzing/reports:/src/libxml2/out libxml2_fz
+```
